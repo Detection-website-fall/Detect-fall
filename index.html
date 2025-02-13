@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fall Detection Status</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,25 +47,37 @@
     </div>
     
     <script>
-        async function fetchStatus() {
-            try {
-                let response = await fetch('https://your-database-url.com/status.json'); // Replace with actual data source
-                let data = await response.json();
-                let statusElement = document.getElementById("status");
-                
-                if (data.fall_detected) {
-                    statusElement.textContent = "Fall Detected!";
-                    statusElement.className = "status alert";
-                } else {
-                    statusElement.textContent = "No Fall Detected";
-                    statusElement.className = "status safe";
-                }
-            } catch (error) {
-                console.error("Error fetching status:", error);
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "detection-website-fall.firebaseapp.com",
+            databaseURL: "https://detection-website-fall-default-rtdb.firebaseio.com/",
+            projectId: "detection-website-fall",
+            storageBucket: "detection-website-fall.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+        
+        function updateStatus(snapshot) {
+            let statusElement = document.getElementById("status");
+            let fallDetected = snapshot.val();
+            
+            if (fallDetected) {
+                statusElement.textContent = "Fall Detected!";
+                statusElement.className = "status alert";
+            } else {
+                statusElement.textContent = "No Fall Detected";
+                statusElement.className = "status safe";
             }
         }
         
-        setInterval(fetchStatus, 5000); // Update every 5 seconds
+        database.ref("/fall_detected").on("value", (snapshot) => {
+            updateStatus(snapshot);
+        });
     </script>
 </body>
 </html>
