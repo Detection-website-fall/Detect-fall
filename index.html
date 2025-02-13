@@ -3,72 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detection Status</title>
+    <title>Fall Detection Status</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        #status {
-            font-size: 2rem;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .safe {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        .detected {
-            background-color: #dc3545;
-            color: #fff;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .status { font-size: 24px; font-weight: bold; padding: 20px; }
+        .safe { color: green; }
+        .alert { color: red; }
     </style>
 </head>
 <body>
-    <h1>Window Break Detection</h1>
-    <div id="status" class="safe">No Detection</div>
-
+    <h1>Fall Detection System</h1>
+    <p class="status safe" id="status">No Fall Detected</p>
+    
     <script>
-        async function checkDetectionStatus() {
+        async function fetchStatus() {
             try {
-                // Simulated API URL. Replace with your actual API endpoint.
-                const response = await fetch('detection-status.json');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch detection status');
-                }
+                let response = await fetch('https://your-database-url.com/status.json'); // Replace with actual data source
+                let data = await response.json();
+                let statusElement = document.getElementById("status");
                 
-                const data = await response.json();
-                const statusDiv = document.getElementById('status');
-
-                if (data.detected) {
-                    statusDiv.textContent = 'Detection Detected!';
-                    statusDiv.className = 'detected';
+                if (data.fall_detected) {
+                    statusElement.textContent = "Fall Detected!";
+                    statusElement.className = "status alert";
                 } else {
-                    statusDiv.textContent = 'No Detection';
-                    statusDiv.className = 'safe';
+                    statusElement.textContent = "No Fall Detected";
+                    statusElement.className = "status safe";
                 }
             } catch (error) {
-                console.error('Error fetching detection status:', error);
+                console.error("Error fetching status:", error);
             }
         }
-
-        // Polling every 5 seconds to update the status
-        setInterval(checkDetectionStatus, 5000);
-
-        // Initial check
-        checkDetectionStatus();
+        
+        setInterval(fetchStatus, 5000); // Update every 5 seconds
     </script>
 </body>
 </html>
-
