@@ -5,15 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fall Detection Status</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        .status { font-size: 24px; font-weight: bold; padding: 20px; }
-        .safe { color: green; }
-        .alert { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .safe {
+            color: green;
+            background-color: #d4edda;
+        }
+        .alert {
+            color: red;
+            background-color: #f8d7da;
+        }
     </style>
 </head>
 <body>
-    <h1>Fall Detection System</h1>
-    <p class="status safe" id="status">No Fall Detected</p>
+    <div class="container">
+        <h1>Fall Detection System</h1>
+        <p class="status safe" id="status">No Fall Detected</p>
+    </div>
     
     <script>
         async function fetchStatus() {
